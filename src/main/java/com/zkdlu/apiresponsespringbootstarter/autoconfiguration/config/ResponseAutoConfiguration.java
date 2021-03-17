@@ -8,16 +8,14 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 
 @Configuration
-@ConditionalOnClass(value = ResponseService.class)
+@ConditionalOnMissingBean(annotation = ControllerAdvice.class)
 @EnableConfigurationProperties(ResponseProperties.class)
 public class ResponseAutoConfiguration {
-    private final ResponseProperties responseProperties;
-
-    public ResponseAutoConfiguration(ResponseProperties responseProperties) {
-        this.responseProperties = responseProperties;
-    }
+    @Autowired
+    private ResponseProperties responseProperties;
 
     @Bean
     @ConditionalOnMissingBean
@@ -36,7 +34,7 @@ public class ResponseAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public ResponseService responseService() {
-        return new ResponseService(responseConfig());
+    public ResponseService responseService(ResponseConfig responseConfig) {
+        return new ResponseService(responseConfig);
     }
 }
