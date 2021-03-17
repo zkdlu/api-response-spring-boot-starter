@@ -1,4 +1,4 @@
-package com.zkdlu.apiresponsespringbootstarter.config;
+package com.zkdlu.apiresponsespringbootstarter.core.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;

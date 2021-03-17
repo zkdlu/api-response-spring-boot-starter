@@ -1,4 +1,4 @@
-package com.zkdlu.apiresponsespringbootstarter.model;
+package com.zkdlu.apiresponsespringbootstarter.core.model;
 
 import java.util.List;
 
