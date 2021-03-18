@@ -6,13 +6,9 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ConditionalOnClass(TestProperties.class)
+@ConditionalOnClass(Test.class)
 @EnableConfigurationProperties(TestProperties.class)
 public class TestAutoConfiguration {
-    @Autowired
-    public TestProperties testProperties;
 
-    public TestAutoConfiguration() {
-        System.out.println(testProperties.toString());
-    }
+
 }
