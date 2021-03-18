@@ -2,10 +2,10 @@ package com.zkdlu.apiresponsespringbootstarter;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@ConfigurationProperties(prefix = "zkdlu.test")
+@ConfigurationProperties("zkdlu.test")
 public class TestProperties {
-    private String one;
-    private String oneTwo;
+    private String one = "one-1";
+    private String oneTwo = "one-two";
 
     public String getOne() {
         return one;
@@ -21,5 +21,10 @@ public class TestProperties {
 
     public void setOneTwo(String oneTwo) {
         this.oneTwo = oneTwo;
+    }
+
+    @Override
+    public String toString() {
+        return one + " : " + oneTwo;
     }
 }
