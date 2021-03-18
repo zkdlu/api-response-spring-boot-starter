@@ -2,7 +2,7 @@ package com.zkdlu.apiresponsespringbootstarter.autoconfiguration.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@ConfigurationProperties(prefix = "spring.response")
+@ConfigurationProperties(prefix = "zkdlu.response")
 public class ResponseProperties {
     private String successCode;
     private String successMsg;

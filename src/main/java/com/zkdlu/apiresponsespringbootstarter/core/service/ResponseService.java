@@ -4,6 +4,7 @@ import com.zkdlu.apiresponsespringbootstarter.autoconfiguration.config.ResponseC
 import com.zkdlu.apiresponsespringbootstarter.core.model.CommonResult;
 import com.zkdlu.apiresponsespringbootstarter.core.model.ListResult;
 import com.zkdlu.apiresponsespringbootstarter.core.model.SingleResult;
+import org.apache.coyote.Response;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -12,6 +13,10 @@ import java.util.List;
 @Service
 public class ResponseService {
     private final ResponseConfig responseConfig;
+
+    public ResponseService() {
+        responseConfig = new ResponseConfig();
+    }
 
     public ResponseService(ResponseConfig responseConfig) {
         this.responseConfig = responseConfig;
