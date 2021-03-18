@@ -45,8 +45,8 @@ public class ResponseService {
     public void setSuccesss(CommonResult result) {
         result.setSuccess(true);
         setCodeAndMessage(result,
-                (String) responseConfig.get("success.code"),
-                (String) responseConfig.get("success.msg"));
+                (String) responseConfig.get("success-code"),
+                (String) responseConfig.get("success-msg"));
     }
 
     public void setFail(CommonResult result, String code, String message) {

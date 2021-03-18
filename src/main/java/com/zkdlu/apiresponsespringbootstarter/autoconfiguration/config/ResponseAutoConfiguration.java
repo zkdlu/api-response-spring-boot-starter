@@ -25,8 +25,8 @@ public class ResponseAutoConfiguration {
                 : responseProperties.getSuccessMsg();
 
         ResponseConfig responseConfig = new ResponseConfig();
-        responseConfig.put("success.code", successCode);
-        responseConfig.put("success.msg", successMsg);
+        responseConfig.put("success-code", successCode);
+        responseConfig.put("success-msg", successMsg);
 
         return responseConfig;
     }
