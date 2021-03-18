@@ -5,7 +5,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "zkdlu.test")
 public class TestProperties {
     private String one;
-    private String two;
     private String oneTwo;
 
     public String getOne() {
@@ -14,14 +13,6 @@ public class TestProperties {
 
     public void setOne(String one) {
         this.one = one;
-    }
-
-    public String getTwo() {
-        return two;
-    }
-
-    public void setTwo(String two) {
-        this.two = two;
     }
 
     public String getOneTwo() {

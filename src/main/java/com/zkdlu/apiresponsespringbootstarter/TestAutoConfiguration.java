@@ -19,9 +19,11 @@ public class TestAutoConfiguration {
     @ConditionalOnMissingBean
     public TestConfig testConfig() {
         TestConfig testConfig = new TestConfig();
-        testConfig.put("one", testProperties.getOne());
-        testConfig.put("two", testProperties.getTwo());
-        testConfig.put("oneTwo", testProperties.getOneTwo());
+        String one = testProperties.getOne();
+        String two = testProperties.getOneTwo();
+
+        testConfig.put("one", one == null ? System.getProperty("one") : one);
+        testConfig.put("oneTwo", two == null ? System.getProperty("one.two") : two);
 
         return testConfig;
     }

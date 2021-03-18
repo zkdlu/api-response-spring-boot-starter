@@ -1,3 +1,3 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.zkdlu.apiresponsespringbootstarter.TestAutoConfiguration,\
-  com.zkdlu.apiresponsespringbootstarter.autoconfiguration.config.ResponseAutoConfiguration
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.zkdlu.apiresponsespringbootstarter.TestAutoConfiguration
 
