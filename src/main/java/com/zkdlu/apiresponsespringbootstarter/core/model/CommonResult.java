@@ -1,8 +1,8 @@
-package com.zkdlu.apiresponsespringbootstarter;
+package com.zkdlu.apiresponsespringbootstarter.core.model;
 
 public class CommonResult {
     private boolean success;
-    private int code;
+    private String code;
     private String msg;
 
     public boolean isSuccess() {
@@ -13,11 +13,11 @@ public class CommonResult {
         this.success = success;
     }
 
-    public int getCode() {
+    public String getCode() {
         return code;
     }
 
-    public void setCode(int code) {
+    public void setCode(String code) {
         this.code = code;
     }
 
@@ -29,4 +29,3 @@ public class CommonResult {
         this.msg = msg;
     }
 }
-

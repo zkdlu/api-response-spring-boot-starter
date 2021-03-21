@@ -1,7 +1,7 @@
-package com.zkdlu.apiresponsespringbootstarter;
+package com.zkdlu.apiresponsespringbootstarter.core.model;
 
 public class SingleResult<T> extends CommonResult {
-    private  T data;
+    private T data;
 
     public T getData() {
         return data;

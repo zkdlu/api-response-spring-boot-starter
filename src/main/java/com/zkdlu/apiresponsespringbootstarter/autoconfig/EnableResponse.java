@@ -1,6 +1,6 @@
-package com.zkdlu.apiresponsespringbootstarter;
+package com.zkdlu.apiresponsespringbootstarter.autoconfig;
 
-
+import com.zkdlu.apiresponsespringbootstarter.core.service.ResponseService;
 import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.ElementType;
@@ -10,6 +10,7 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-@Import(Test.class)
-public @interface EnableTest {
+@Import({ResponseService.class})
+public @interface EnableResponse {
+
 }
