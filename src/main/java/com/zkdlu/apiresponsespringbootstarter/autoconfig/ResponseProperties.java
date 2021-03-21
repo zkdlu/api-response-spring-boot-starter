@@ -5,13 +5,13 @@ import java.util.Map;
 
 @ConfigurationProperties("spring.response")
 public class ResponseProperties {
-    private Map<Exception, ExceptionProperties> exceptions;
+    private Map<String, ExceptionProperties> exceptions;
 
-    public Map<Exception, ExceptionProperties> getExceptions() {
+    public Map<String, ExceptionProperties> getExceptions() {
         return exceptions;
     }
 
-    public void setExceptions(Map<Exception, ExceptionProperties> exceptions) {
+    public void setExceptions(Map<String, ExceptionProperties> exceptions) {
         this.exceptions = exceptions;
     }
 

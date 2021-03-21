@@ -23,7 +23,10 @@ public class ExceptionAdvice {
     public Object handle(HttpServletRequest request, Exception e) {
         SingleResult<Object> result = new SingleResult<>();
 
-        ResponseProperties.ExceptionProperties exceptionModel = responseProperties.getExceptions().get(e);
+        ResponseProperties.ExceptionProperties exceptionModel = responseProperties.getExceptions()
+                .values().stream().filter(r -> r.getType().equals(e.getClass()))
+                .findFirst().orElseThrow(NotDefineException::new);
+
         result.setSuccess(false);
         result.setCode(exceptionModel.getCode());
         result.setMsg(exceptionModel.getMsg());
