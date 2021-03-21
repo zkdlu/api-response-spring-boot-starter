@@ -1,22 +1,47 @@
 package com.zkdlu.apiresponsespringbootstarter.autoconfig;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Bean;
-
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 
 @ConfigurationProperties("spring.response")
 public class ResponseProperties {
-    private List<ExceptionModel> exceptions = new ArrayList<>();
+    private Map<Exception, ExceptionProperties> exceptions;
 
-    @Bean
-    @ConfigurationProperties("exceptions")
-    public List<ExceptionModel> getExceptions() {
+    public Map<Exception, ExceptionProperties> getExceptions() {
         return exceptions;
     }
 
-    public void setExceptions(List<ExceptionModel> exceptions) {
+    public void setExceptions(Map<Exception, ExceptionProperties> exceptions) {
         this.exceptions = exceptions;
+    }
+
+    public static class ExceptionProperties {
+        private String code;
+        private String msg;
+        private Class<Exception> type;
+
+        public String getCode() {
+            return code;
+        }
+
+        public void setCode(String code) {
+            this.code = code;
+        }
+
+        public String getMsg() {
+            return msg;
+        }
+
+        public void setMsg(String msg) {
+            this.msg = msg;
+        }
+
+        public Class<Exception> getType() {
+            return type;
+        }
+
+        public void setType(Class<Exception> type) {
+            this.type = type;
+        }
     }
 }
