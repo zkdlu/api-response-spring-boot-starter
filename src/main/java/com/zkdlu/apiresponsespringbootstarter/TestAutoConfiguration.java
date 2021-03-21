@@ -12,8 +12,5 @@ import org.springframework.context.annotation.Import;
 @Import({ResponseAdvice.class, WebConfig.class})
 @EnableConfigurationProperties(TestProperties.class)
 public class TestAutoConfiguration {
-    @Bean
-    public Test test() {
-        return new Test();
-    }
+
 }
