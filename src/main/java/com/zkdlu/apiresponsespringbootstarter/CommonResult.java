@@ -1,13 +1,32 @@
 package com.zkdlu.apiresponsespringbootstarter;
 
 public class CommonResult {
-    private String data;
+    private boolean success;
+    private int code;
+    private String msg;
 
-    public String getData() {
-        return data;
+    public boolean isSuccess() {
+        return success;
     }
 
-    public void setData(String data) {
-        this.data = data;
+    public void setSuccess(boolean success) {
+        this.success = success;
+    }
+
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 }
+
