@@ -19,4 +19,5 @@ public class TestAutoConfiguration {
         test.testProperties = testProperties;
         return test;
     }
+
 }
