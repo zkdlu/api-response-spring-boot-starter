@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Import;
 
 @Configuration
 @ConditionalOnClass(Test.class)
-@Import(ResponseAdvice.class)
+@Import({ResponseAdvice.class, WebConfig.class})
 @EnableConfigurationProperties(TestProperties.class)
 public class TestAutoConfiguration {
     @Bean
