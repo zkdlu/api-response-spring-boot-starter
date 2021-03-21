@@ -21,12 +21,6 @@ public class ResponseAdvice implements ResponseBodyAdvice<Object> {
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
         CommonResult commonResult = new CommonResult();
         commonResult.setData((String)body);
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            return objectMapper.writeValueAsString(objectMapper);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException();
-        }
+        return commonResult;
     }
 }
