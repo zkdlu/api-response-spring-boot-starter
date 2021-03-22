@@ -1,7 +1,7 @@
 package com.zkdlu.apiresponsespringbootstarter.core.advice;
 
+import com.zkdlu.apiresponsespringbootstarter.autoconfig.ResponseProperties;
 import com.zkdlu.apiresponsespringbootstarter.core.model.CommonResult;
-import com.zkdlu.apiresponsespringbootstarter.core.model.SingleResult;
 import com.zkdlu.apiresponsespringbootstarter.core.service.ResponseService;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
@@ -14,9 +14,11 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 @RestControllerAdvice
 public class ResponseAdvice implements ResponseBodyAdvice<Object> {
     private final ResponseService responseService;
+    private final ResponseProperties responseProperties;
 
-    public ResponseAdvice(ResponseService responseService) {
+    public ResponseAdvice(ResponseService responseService, ResponseProperties responseProperties) {
         this.responseService = responseService;
+        this.responseProperties = responseProperties;
     }
 
     @Override
@@ -30,11 +32,10 @@ public class ResponseAdvice implements ResponseBodyAdvice<Object> {
             return body;
         }
 
-        SingleResult<Object> result = new SingleResult<>();
+        CommonResult result = responseService.getResult(body);
         result.setSuccess(true);
-        result.setCode("SUCCESS");
-        result.setMsg("SUCCESS");
-        result.setData(body);
+        result.setCode(responseProperties.getSuccess().getCode());
+        result.setMsg(responseProperties.getSuccess().getMsg());
 
         return result;
     }
