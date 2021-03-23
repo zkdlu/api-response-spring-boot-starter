@@ -2,6 +2,23 @@
 The rest api classifies the HttpMethod and structured the url mapped to the resource. and have standard structure to response data.
 Spring Api Response provides a standard structure to response data and exception handling 
 
+## Maven configuration
+Add the Maven dependency:
+```xml
+<repositories>
+  <repository>
+    <id>jitpack.io</id>
+    <url>https://jitpack.io</url>
+  </repository>
+</repositories>
+
+<dependency>
+    <groupId>com.github.zkdlu</groupId>
+    <artifactId>api-response-spring-boot-starter</artifactId>
+    <version>1.0.0</version>
+</dependency>
+```
+
 ## Getting Started
 Here is a quick teaser in Spring boot Application:
 
@@ -31,7 +48,49 @@ spring:
         msg: 'Something went wrong'
         type: com.example.demo.CustomException
       ..
-     
+      
+// Some Controller
+public class DemoController {
+  @GetMapping("/")
+  public String test() {
+    return "demo"
+  }
+  
+  @GetMapping("/model")
+  public MyModel test2() {
+    return MyModel.prototype();
+  }
+  
+  @GetMapping("/exception")
+  public String test3() {
+    throw new CustomException();
+  }
+  
+  @GetMapping("/list")
+  public List<MyModel> test4() {
+    return Array.asList(MyModel.prototype()); 
+  }
+}
 ```
 
-....
+The response structure
+```json
+{
+  "success": true,
+  "code": "",
+  "msg": ""
+  "data": {
+    ..
+  }
+}
+```
+
+## Build from Source
+You don’t need to build from source (binaries in jitpack.io), but if you want to try out the latest, Use the built-in gradle wrapper. You don't need gradle, jdk, anything.
+
+```bash
+# macos
+$ chomod +x ./gradlew
+$ ./gradlew install
+```
+
