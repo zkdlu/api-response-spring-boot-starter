@@ -78,9 +78,8 @@ The response structure
 {
   "success": true,
   "code": "",
-  "msg": ""
+  "msg": "",
   "data": {
-    ..
   }
 }
 ```
