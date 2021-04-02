@@ -19,7 +19,6 @@ public class ExceptionAdvice {
     }
 
     @ExceptionHandler(RuntimeException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Object handle(HttpServletRequest request, Exception e) {
         SingleResult<Object> result = new SingleResult<>();
 
