@@ -11,7 +11,6 @@ import org.springframework.context.annotation.Import;
 
 @Configuration
 @ConditionalOnClass(ResponseService.class)
-@Import({ExceptionAdvice.class, ResponseAdvice.class, WebConfig.class})
 @EnableConfigurationProperties(ResponseProperties.class)
 public class ResponseAutoConfiguration {
 }
