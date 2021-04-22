@@ -19,6 +19,17 @@ Add the Maven dependency:
 </dependency>
 ```
 
+## Gradle configuration
+Add the Gradle dependency:
+```groovy
+repositories {
+  maven { url 'https://jitpack.io' }
+}
+dependencies {
+	implementation 'com.github:zkdlu:api-response-spring-boot-starter:Tag'
+}
+```
+
 ## Getting Started
 Here is a quick teaser in Spring boot Application:
 
@@ -74,14 +85,34 @@ public class DemoController {
 ```
 
 The response structure
+
+- Before
 ```json
 {
+  "msg": "hello"
+}
+```
+
+- After
+```json
+# IF Sucess
+{
   "success": true,
-  "code": "",
-  "msg": "",
+  "code": "<success code> | SUCCESS",
+  "msg": "<success msg> | SUCCESS",
   "data": {
+    "msg": "hello"
   }
 }
+
+# IF Thrown Exception
+{
+  "success": false,
+  "code": "<fail code by your exception>",
+  "msg": "<fail msg by your exception>",
+  "data": 
+}
+
 ```
 
 ## Build from Source
