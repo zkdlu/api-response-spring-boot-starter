@@ -23,10 +23,11 @@ Add the Maven dependency:
 Add the Gradle dependency:
 ```groovy
 repositories {
-  maven { url 'https://jitpack.io' }
+    maven { url 'https://jitpack.io' }
 }
+
 dependencies {
-	implementation 'com.github:zkdlu:api-response-spring-boot-starter:Tag'
+    implementation 'com.github:zkdlu:api-response-spring-boot-starter:Tag'
 }
 ```
 
