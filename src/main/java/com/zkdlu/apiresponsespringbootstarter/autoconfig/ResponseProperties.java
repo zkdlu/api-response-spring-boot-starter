@@ -27,14 +27,14 @@ public class ResponseProperties {
     }
 
     public static class SuccessProperties {
-        private String code = "SUCCESS";
+        private Integer code = 200;
         private String msg = "SUCCESS";
 
-        public String getCode() {
+        public Integer getCode() {
             return code;
         }
 
-        public void setCode(String code) {
+        public void setCode(Integer code) {
             this.code = code;
         }
 
@@ -48,15 +48,15 @@ public class ResponseProperties {
     }
 
     public static class ExceptionProperties {
-        private String code = "ERROR";
+        private Integer code = 400;
         private String msg = "ERROR";
-        private Class<Exception> type;
+        private Class<RuntimeException> type;
 
-        public String getCode() {
+        public Integer getCode() {
             return code;
         }
 
-        public void setCode(String code) {
+        public void setCode(Integer code) {
             this.code = code;
         }
 
@@ -68,11 +68,11 @@ public class ResponseProperties {
             this.msg = msg;
         }
 
-        public Class<Exception> getType() {
+        public Class<RuntimeException> getType() {
             return type;
         }
 
-        public void setType(Class<Exception> type) {
+        public void setType(Class<RuntimeException> type) {
             this.type = type;
         }
     }

@@ -4,7 +4,9 @@ import com.zkdlu.apiresponsespringbootstarter.autoconfig.ResponseProperties;
 import com.zkdlu.apiresponsespringbootstarter.core.model.CommonResult;
 import com.zkdlu.apiresponsespringbootstarter.core.service.ResponseService;
 import org.springframework.core.MethodParameter;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
@@ -29,7 +31,15 @@ public class ResponseAdvice implements ResponseBodyAdvice<Object> {
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
         if (body instanceof CommonResult) {
-            return body;
+            CommonResult commonResult = (CommonResult) body;
+            try {
+                HttpStatus status = HttpStatus.valueOf(commonResult.getCode());
+                response.setStatusCode(status);
+            } catch (IllegalArgumentException e) {
+                response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+
+            return commonResult;
         }
 
         CommonResult result = responseService.getResult(body);
