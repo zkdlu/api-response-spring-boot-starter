@@ -52,11 +52,11 @@ public class CustomException extends RuntimeException {
 spring:
   response:
     success:
-      code: HELLO
+      code: 200
       msg: SUCCESS
     exceptions:
       custom1:
-        code: ERR1
+        code: 400
         msg: 'Something went wrong'
         type: com.example.demo.CustomException
       ..
@@ -99,7 +99,7 @@ The response structure
 # IF Sucess
 {
   "success": true,
-  "code": "<success code> | SUCCESS",
+  "code": 200,
   "msg": "<success msg> | SUCCESS",
   "data": {
     "msg": "hello"
@@ -109,7 +109,7 @@ The response structure
 # IF Thrown Exception
 {
   "success": false,
-  "code": "<fail code by your exception>",
+  "code": 400,
   "msg": "<fail msg by your exception>",
   "data": 
 }
