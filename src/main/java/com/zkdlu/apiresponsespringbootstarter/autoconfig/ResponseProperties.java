@@ -1,6 +1,7 @@
 package com.zkdlu.apiresponsespringbootstarter.autoconfig;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.http.HttpStatus;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -48,8 +49,27 @@ public class ResponseProperties {
     }
 
     public static class ExceptionProperties {
-        private Integer code = 400;
-        private String msg = "ERROR";
+
+        public static final ExceptionProperties NOT_FOUND = new ExceptionProperties(HttpStatus.NOT_FOUND);
+        public static final ExceptionProperties METHOD_NOT_ALLOWED = new ExceptionProperties(HttpStatus.METHOD_NOT_ALLOWED);
+
+        public static final ExceptionProperties UNHANDLED = new ExceptionProperties(HttpStatus.NOT_IMPLEMENTED.value(), "Unhandled Exception");
+
+        public ExceptionProperties() {
+            this(HttpStatus.BAD_REQUEST);
+        }
+
+        private ExceptionProperties(HttpStatus httpStatus) {
+            this(httpStatus.value(), httpStatus.getReasonPhrase());
+        }
+
+        private ExceptionProperties(Integer code, String msg) {
+            this.code = code;
+            this.msg = msg;
+        }
+
+        private Integer code;
+        private String msg;
         private Class<RuntimeException> type;
 
         public Integer getCode() {

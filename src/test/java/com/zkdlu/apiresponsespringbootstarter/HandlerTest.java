@@ -5,6 +5,7 @@ import com.zkdlu.apiresponsespringbootstarter.autoconfig.ResponseProperties.Exce
 import com.zkdlu.apiresponsespringbootstarter.autoconfig.ResponseProperties.SuccessProperties;
 import com.zkdlu.apiresponsespringbootstarter.core.advice.ExceptionAdvice;
 import com.zkdlu.apiresponsespringbootstarter.core.advice.ResponseAdvice;
+import com.zkdlu.apiresponsespringbootstarter.core.advice.exception.NotDefineException;
 import com.zkdlu.apiresponsespringbootstarter.core.service.ResponseService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,8 +15,10 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -30,6 +33,7 @@ public class HandlerTest {
         ResponseProperties responseProperties = getResponseProperties();
 
         mockMvc = MockMvcBuilders.standaloneSetup(new DemoApi())
+                .addDispatcherServletCustomizer(dispatcherServlet -> dispatcherServlet.setThrowExceptionIfNoHandlerFound(true))
                 .setControllerAdvice(
                         new ExceptionAdvice(responseProperties),
                         new ResponseAdvice(responseService, responseProperties))
@@ -71,7 +75,31 @@ public class HandlerTest {
     }
 
     @Test
-    void 지원하지않는_상태코드() throws Exception {
+    void 없는_api_test() throws Exception {
+        mockMvc.perform(get("/asdf"))
+                .andDo(print())
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.success", equalTo(false)))
+                .andExpect(jsonPath("$.code", equalTo(404)))
+                .andExpect(jsonPath("$.msg", equalTo("Not Found")))
+                .andExpect(jsonPath("$.data", equalTo(null)))
+        ;
+    }
+
+    @Test
+    void 지원하지않는_http_method_test() throws Exception {
+        mockMvc.perform(post("/exception"))
+                .andDo(print())
+                .andExpect(status().isMethodNotAllowed())
+                .andExpect(jsonPath("$.success", equalTo(false)))
+                .andExpect(jsonPath("$.code", equalTo(405)))
+                .andExpect(jsonPath("$.msg", equalTo("Method Not Allowed")))
+                .andExpect(jsonPath("$.data", equalTo(null)))
+        ;
+    }
+
+    @Test
+    void 지원하지않는_http_status_test() throws Exception {
         ResponseService responseService = new ResponseService();
         ResponseProperties responseProperties = getResponseProperties2();
 
@@ -91,6 +119,27 @@ public class HandlerTest {
         ;
     }
 
+    @Test
+    void 처리하지않는_예외_test() throws Exception {
+        ResponseService responseService = new ResponseService();
+        ResponseProperties responseProperties = getResponseProperties3();
+
+        mockMvc = MockMvcBuilders.standaloneSetup(new DemoApi())
+                .setControllerAdvice(
+                        new ExceptionAdvice(responseProperties),
+                        new ResponseAdvice(responseService, responseProperties))
+                .build();
+
+        mockMvc.perform(get("/exception"))
+                .andDo(print())
+                .andExpect(status().isNotImplemented())
+                .andExpect(jsonPath("$.success", equalTo(false)))
+                .andExpect(jsonPath("$.code", equalTo(501)))
+                .andExpect(jsonPath("$.msg", equalTo("Unhandled Exception")))
+                .andExpect(jsonPath("$.data", equalTo(null)))
+        ;
+    }
+
     private ResponseProperties getResponseProperties() {
         ResponseProperties responseProperties = new ResponseProperties();
         responseProperties.setSuccess(getSuccessProperties());
@@ -105,6 +154,15 @@ public class HandlerTest {
         responseProperties.setSuccess(getSuccessProperties());
 
         responseProperties.setExceptions(getExceptions2());
+
+        return responseProperties;
+    }
+
+    private ResponseProperties getResponseProperties3() {
+        ResponseProperties responseProperties = new ResponseProperties();
+        responseProperties.setSuccess(getSuccessProperties());
+
+        responseProperties.setExceptions(getExceptions3());
 
         return responseProperties;
     }
@@ -130,6 +188,11 @@ public class HandlerTest {
         map.put("err", exceptionProperties);
         return map;
     }
+
+    private Map<String, ExceptionProperties> getExceptions3() {
+        return new HashMap<>();
+    }
+
 
     private SuccessProperties getSuccessProperties() {
         SuccessProperties successProperties = new SuccessProperties();
