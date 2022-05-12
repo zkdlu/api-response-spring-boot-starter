@@ -4,6 +4,7 @@ import com.zkdlu.apiresponsespringbootstarter.autoconfig.ResponseProperties;
 import com.zkdlu.apiresponsespringbootstarter.autoconfig.ResponseProperties.ExceptionProperties;
 import com.zkdlu.apiresponsespringbootstarter.core.model.SingleResult;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
@@ -30,6 +31,11 @@ public class ExceptionAdvice {
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public Object handleNotSupportedMethodException(Exception e) {
         return getResult(getExceptionProperties(e, ExceptionProperties.METHOD_NOT_ALLOWED));
+    }
+
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public Object handleMissingRequestParameterException(Exception e) {
+        return getResult(getExceptionProperties(e, ExceptionProperties.BAD_REQUEST));
     }
 
     private ExceptionProperties getExceptionProperties(Exception e, ExceptionProperties unhandled) {

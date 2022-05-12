@@ -5,7 +5,6 @@ import com.zkdlu.apiresponsespringbootstarter.autoconfig.ResponseProperties.Exce
 import com.zkdlu.apiresponsespringbootstarter.autoconfig.ResponseProperties.SuccessProperties;
 import com.zkdlu.apiresponsespringbootstarter.core.advice.ExceptionAdvice;
 import com.zkdlu.apiresponsespringbootstarter.core.advice.ResponseAdvice;
-import com.zkdlu.apiresponsespringbootstarter.core.advice.exception.NotDefineException;
 import com.zkdlu.apiresponsespringbootstarter.core.service.ResponseService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,7 +14,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -69,7 +67,7 @@ public class HandlerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.success", equalTo(false)))
                 .andExpect(jsonPath("$.code", equalTo(400)))
-                .andExpect(jsonPath("$.msg", equalTo("BAD REQUEST")))
+                .andExpect(jsonPath("$.msg", equalTo("Custom Message")))
                 .andExpect(jsonPath("$.data", equalTo(null)))
         ;
     }
@@ -82,6 +80,18 @@ public class HandlerTest {
                 .andExpect(jsonPath("$.success", equalTo(false)))
                 .andExpect(jsonPath("$.code", equalTo(404)))
                 .andExpect(jsonPath("$.msg", equalTo("Not Found")))
+                .andExpect(jsonPath("$.data", equalTo(null)))
+        ;
+    }
+
+    @Test
+    void 요청파라미터누락_test() throws Exception {
+        mockMvc.perform(get("/3"))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.success", equalTo(false)))
+                .andExpect(jsonPath("$.code", equalTo(400)))
+                .andExpect(jsonPath("$.msg", equalTo("Bad Request")))
                 .andExpect(jsonPath("$.data", equalTo(null)))
         ;
     }
@@ -170,7 +180,7 @@ public class HandlerTest {
     private Map<String, ExceptionProperties> getExceptions() {
         ExceptionProperties exceptionProperties = new ExceptionProperties();
         exceptionProperties.setCode(400);
-        exceptionProperties.setMsg("BAD REQUEST");
+        exceptionProperties.setMsg("Custom Message");
         exceptionProperties.setType(RuntimeException.class);
 
         Map<String, ExceptionProperties> map = new HashMap<>();

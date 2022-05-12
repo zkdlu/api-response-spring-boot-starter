@@ -53,6 +53,8 @@ public class ResponseProperties {
         public static final ExceptionProperties NOT_FOUND = new ExceptionProperties(HttpStatus.NOT_FOUND);
         public static final ExceptionProperties METHOD_NOT_ALLOWED = new ExceptionProperties(HttpStatus.METHOD_NOT_ALLOWED);
 
+        public static final ExceptionProperties BAD_REQUEST = new ExceptionProperties(HttpStatus.BAD_REQUEST);
+
         public static final ExceptionProperties UNHANDLED = new ExceptionProperties(HttpStatus.NOT_IMPLEMENTED.value(), "Unhandled Exception");
 
         public ExceptionProperties() {
