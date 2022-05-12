@@ -3,9 +3,7 @@ package com.zkdlu.apiresponsespringbootstarter.core.advice;
 import com.zkdlu.apiresponsespringbootstarter.autoconfig.ResponseProperties;
 import com.zkdlu.apiresponsespringbootstarter.core.advice.exception.NotDefineException;
 import com.zkdlu.apiresponsespringbootstarter.core.model.SingleResult;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.servlet.http.HttpServletRequest;
