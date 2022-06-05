@@ -25,7 +25,7 @@ public class DemoApi {
 
     @GetMapping("exception")
     public Demo demo2() {
-        throw new RuntimeException();
+        throw new RuntimeException("메시지");
     }
 
     static class Demo {

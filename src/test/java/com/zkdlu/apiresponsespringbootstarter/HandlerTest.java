@@ -67,7 +67,7 @@ public class HandlerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.success", equalTo(false)))
                 .andExpect(jsonPath("$.code", equalTo(400)))
-                .andExpect(jsonPath("$.msg", equalTo("Custom Message")))
+                .andExpect(jsonPath("$.msg", equalTo("Custom Message: 메시지")))
                 .andExpect(jsonPath("$.data", equalTo(null)))
         ;
     }
@@ -79,7 +79,7 @@ public class HandlerTest {
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.success", equalTo(false)))
                 .andExpect(jsonPath("$.code", equalTo(404)))
-                .andExpect(jsonPath("$.msg", equalTo("Not Found")))
+                .andExpect(jsonPath("$.msg", equalTo("Not Found: No handler found for GET /asdf")))
                 .andExpect(jsonPath("$.data", equalTo(null)))
         ;
     }
@@ -91,7 +91,7 @@ public class HandlerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.success", equalTo(false)))
                 .andExpect(jsonPath("$.code", equalTo(400)))
-                .andExpect(jsonPath("$.msg", equalTo("Bad Request")))
+                .andExpect(jsonPath("$.msg", equalTo("Bad Request: Required String parameter 'param' is not present")))
                 .andExpect(jsonPath("$.data", equalTo(null)))
         ;
     }
@@ -103,7 +103,7 @@ public class HandlerTest {
                 .andExpect(status().isMethodNotAllowed())
                 .andExpect(jsonPath("$.success", equalTo(false)))
                 .andExpect(jsonPath("$.code", equalTo(405)))
-                .andExpect(jsonPath("$.msg", equalTo("Method Not Allowed")))
+                .andExpect(jsonPath("$.msg", equalTo("Method Not Allowed: Request method 'POST' not supported")))
                 .andExpect(jsonPath("$.data", equalTo(null)))
         ;
     }
@@ -124,7 +124,7 @@ public class HandlerTest {
                 .andExpect(status().isInternalServerError())
                 .andExpect(jsonPath("$.success", equalTo(false)))
                 .andExpect(jsonPath("$.code", equalTo(4000)))
-                .andExpect(jsonPath("$.msg", equalTo("지원하지 않는 상태코드")))
+                .andExpect(jsonPath("$.msg", equalTo("지원하지 않는 상태코드: 메시지")))
                 .andExpect(jsonPath("$.data", equalTo(null)))
         ;
     }
@@ -145,7 +145,7 @@ public class HandlerTest {
                 .andExpect(status().isNotImplemented())
                 .andExpect(jsonPath("$.success", equalTo(false)))
                 .andExpect(jsonPath("$.code", equalTo(501)))
-                .andExpect(jsonPath("$.msg", equalTo("Unhandled Exception")))
+                .andExpect(jsonPath("$.msg", equalTo("Unhandled Exception: " + "메시지")))
                 .andExpect(jsonPath("$.data", equalTo(null)))
         ;
     }

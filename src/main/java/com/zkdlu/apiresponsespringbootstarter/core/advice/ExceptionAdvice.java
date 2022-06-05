@@ -44,6 +44,8 @@ public class ExceptionAdvice {
                 .filter(r -> r.getType().equals(e.getClass()))
                 .findFirst()
                 .orElse(unhandled);
+
+        exceptionModel.setMsg(exceptionModel.getMsg() + ": " + e.getMessage());
         return exceptionModel;
     }
 
