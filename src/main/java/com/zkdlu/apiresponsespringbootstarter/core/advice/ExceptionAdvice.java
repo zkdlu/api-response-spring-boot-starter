@@ -19,23 +19,23 @@ public class ExceptionAdvice {
 
     @ExceptionHandler(RuntimeException.class)
     public Object handle(Exception e) {
-        return getResult(getExceptionProperties(e, ExceptionProperties.UNHANDLED));
+        return getResult(e, getExceptionProperties(e, ExceptionProperties.UNHANDLED));
     }
 
 
     @ExceptionHandler(NoHandlerFoundException.class)
     public Object handleNoHandlerFoundException(Exception e) {
-        return getResult(getExceptionProperties(e, ExceptionProperties.NOT_FOUND));
+        return getResult(e, getExceptionProperties(e, ExceptionProperties.NOT_FOUND));
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public Object handleNotSupportedMethodException(Exception e) {
-        return getResult(getExceptionProperties(e, ExceptionProperties.METHOD_NOT_ALLOWED));
+        return getResult(e, getExceptionProperties(e, ExceptionProperties.METHOD_NOT_ALLOWED));
     }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public Object handleMissingRequestParameterException(Exception e) {
-        return getResult(getExceptionProperties(e, ExceptionProperties.BAD_REQUEST));
+        return getResult(e, getExceptionProperties(e, ExceptionProperties.BAD_REQUEST));
     }
 
     private ExceptionProperties getExceptionProperties(Exception e, ExceptionProperties unhandled) {
@@ -45,15 +45,16 @@ public class ExceptionAdvice {
                 .findFirst()
                 .orElse(unhandled);
 
-        exceptionModel.setMsg(exceptionModel.getMsg() + ": " + e.getMessage());
+        exceptionModel.setMsg(exceptionModel.getMsg());
         return exceptionModel;
     }
 
-    private SingleResult<Object> getResult(ExceptionProperties exceptionModel) {
+    private SingleResult<Object> getResult(Exception e, ExceptionProperties exceptionModel) {
         SingleResult<Object> result = new SingleResult<>();
         result.setSuccess(false);
         result.setCode(exceptionModel.getCode());
         result.setMsg(exceptionModel.getMsg());
+        result.setData(e.getMessage());
         return result;
     }
 }
