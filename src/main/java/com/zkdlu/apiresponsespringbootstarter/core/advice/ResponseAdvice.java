@@ -20,7 +20,7 @@ import java.util.List;
 
 @RestControllerAdvice
 public class ResponseAdvice implements ResponseBodyAdvice<Object> {
-    private final List<PathPattern> whitelist = Arrays.asList(
+    private static final List<PathPattern> WHITE_LIST = Arrays.asList(
             new PathPatternParser().parse("/v*/api-docs"),
             new PathPatternParser().parse("/swagger-resources/**"),
             new PathPatternParser().parse("/swagger-ui.html"),
@@ -42,7 +42,10 @@ public class ResponseAdvice implements ResponseBodyAdvice<Object> {
 
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
-        if (whitelist.stream().anyMatch(pathPattern -> pathPattern.matches(PathContainer.parsePath(request.getURI().getPath())))) return body;
+        if (containInWhiteList(request)) {
+            return body;
+        }
+
         if (body instanceof CommonResult) {
             CommonResult commonResult = (CommonResult) body;
             try {
@@ -61,5 +64,10 @@ public class ResponseAdvice implements ResponseBodyAdvice<Object> {
         result.setMsg(responseProperties.getSuccess().getMsg());
 
         return result;
+    }
+
+    private boolean containInWhiteList(ServerHttpRequest request) {
+        return WHITE_LIST.stream()
+                .anyMatch(pathPattern -> pathPattern.matches(PathContainer.parsePath(request.getURI().getPath())));
     }
 }
