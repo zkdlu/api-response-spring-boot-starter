@@ -4,6 +4,7 @@ import com.zkdlu.apiresponsespringbootstarter.autoconfig.ResponseProperties;
 import com.zkdlu.apiresponsespringbootstarter.autoconfig.ResponseProperties.ExceptionProperties;
 import com.zkdlu.apiresponsespringbootstarter.core.model.SingleResult;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -35,6 +36,11 @@ public class ExceptionAdvice {
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public Object handleMissingRequestParameterException(Exception e) {
+        return getResult(e, getExceptionProperties(e, ExceptionProperties.BAD_REQUEST));
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public Object handleValidationException(Exception e) {
         return getResult(e, getExceptionProperties(e, ExceptionProperties.BAD_REQUEST));
     }
 
