@@ -8,6 +8,7 @@ import com.zkdlu.apiresponsespringbootstarter.core.advice.ResponseAdvice;
 import com.zkdlu.apiresponsespringbootstarter.core.service.ResponseService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -147,6 +148,28 @@ public class HandlerTest {
                 .andExpect(jsonPath("$.code", equalTo(501)))
                 .andExpect(jsonPath("$.msg", equalTo("Unhandled Exception")))
                 .andExpect(jsonPath("$.data", equalTo("메시지")))
+        ;
+    }
+
+    @Test
+    void valid_예외_test() throws Exception {
+        ResponseService responseService = new ResponseService();
+        ResponseProperties responseProperties = getResponseProperties3();
+
+        mockMvc = MockMvcBuilders.standaloneSetup(new DemoApi())
+                .setControllerAdvice(
+                        new ExceptionAdvice(responseProperties),
+                        new ResponseAdvice(responseService, responseProperties))
+                .build();
+
+        mockMvc.perform(get("/valid")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{}"))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.success", equalTo(false)))
+                .andExpect(jsonPath("$.code", equalTo(400)))
+                .andExpect(jsonPath("$.msg", equalTo("Bad Request")))
         ;
     }
 

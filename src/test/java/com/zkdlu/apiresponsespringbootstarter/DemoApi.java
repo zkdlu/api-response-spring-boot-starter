@@ -2,9 +2,13 @@ package com.zkdlu.apiresponsespringbootstarter;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 @RestController
 public class DemoApi {
@@ -28,7 +32,17 @@ public class DemoApi {
         throw new RuntimeException("메시지");
     }
 
+    @GetMapping("valid")
+    public Demo demo3(@RequestBody @Valid Demo demo) {
+        return demo;
+    }
+
     static class Demo {
+
+        public Demo() {
+        }
+
+        @NotNull
         private String value;
 
         public Demo(String value) {
