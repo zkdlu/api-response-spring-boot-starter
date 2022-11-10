@@ -4,6 +4,7 @@ import com.zkdlu.apiresponsespringbootstarter.autoconfig.ResponseProperties;
 import com.zkdlu.apiresponsespringbootstarter.autoconfig.ResponseProperties.ExceptionProperties;
 import com.zkdlu.apiresponsespringbootstarter.autoconfig.ResponseProperties.SuccessProperties;
 import com.zkdlu.apiresponsespringbootstarter.core.advice.ExceptionAdvice;
+import com.zkdlu.apiresponsespringbootstarter.core.advice.ExceptionCallback;
 import com.zkdlu.apiresponsespringbootstarter.core.advice.ResponseAdvice;
 import com.zkdlu.apiresponsespringbootstarter.core.service.ResponseService;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,6 +17,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.hamcrest.Matchers.equalTo;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -25,16 +31,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class HandlerTest {
 
     private MockMvc mockMvc;
+    private ExceptionCallback callback;
 
     @BeforeEach
     void setUp() {
         ResponseService responseService = new ResponseService();
         ResponseProperties responseProperties = getResponseProperties();
+        callback = spy(ExceptionCallback.class);
 
         mockMvc = MockMvcBuilders.standaloneSetup(new DemoApi())
                 .addDispatcherServletCustomizer(dispatcherServlet -> dispatcherServlet.setThrowExceptionIfNoHandlerFound(true))
                 .setControllerAdvice(
-                        new ExceptionAdvice(responseProperties),
+                        new ExceptionAdvice(responseProperties, callback),
                         new ResponseAdvice(responseService, responseProperties))
                 .build();
     }
@@ -116,7 +124,7 @@ public class HandlerTest {
 
         mockMvc = MockMvcBuilders.standaloneSetup(new DemoApi())
                 .setControllerAdvice(
-                        new ExceptionAdvice(responseProperties),
+                        new ExceptionAdvice(responseProperties, callback),
                         new ResponseAdvice(responseService, responseProperties))
                 .build();
 
@@ -137,7 +145,7 @@ public class HandlerTest {
 
         mockMvc = MockMvcBuilders.standaloneSetup(new DemoApi())
                 .setControllerAdvice(
-                        new ExceptionAdvice(responseProperties),
+                        new ExceptionAdvice(responseProperties, callback),
                         new ResponseAdvice(responseService, responseProperties))
                 .build();
 
@@ -158,7 +166,7 @@ public class HandlerTest {
 
         mockMvc = MockMvcBuilders.standaloneSetup(new DemoApi())
                 .setControllerAdvice(
-                        new ExceptionAdvice(responseProperties),
+                        new ExceptionAdvice(responseProperties, callback),
                         new ResponseAdvice(responseService, responseProperties))
                 .build();
 
@@ -171,6 +179,45 @@ public class HandlerTest {
                 .andExpect(jsonPath("$.code", equalTo(400)))
                 .andExpect(jsonPath("$.msg", equalTo("Bad Request")))
         ;
+    }
+
+    @Test
+    void exception400_callback() throws Exception {
+        mockMvc.perform(get("/asdf"))
+                .andDo(print())
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.success", equalTo(false)))
+                .andExpect(jsonPath("$.code", equalTo(404)))
+                .andExpect(jsonPath("$.msg", equalTo("Not Found")))
+                .andExpect(jsonPath("$.data", equalTo("No handler found for GET /asdf")))
+        ;
+
+        verify(callback, times(1)).on400Exception(any());
+        verifyNoMoreInteractions(callback);
+    }
+
+    @Test
+    void exception500_callback() throws Exception {
+        ResponseService responseService = new ResponseService();
+        ResponseProperties responseProperties = getResponseProperties3();
+
+        mockMvc = MockMvcBuilders.standaloneSetup(new DemoApi())
+                .setControllerAdvice(
+                        new ExceptionAdvice(responseProperties, callback),
+                        new ResponseAdvice(responseService, responseProperties))
+                .build();
+
+        mockMvc.perform(get("/exception"))
+                .andDo(print())
+                .andExpect(status().isNotImplemented())
+                .andExpect(jsonPath("$.success", equalTo(false)))
+                .andExpect(jsonPath("$.code", equalTo(501)))
+                .andExpect(jsonPath("$.msg", equalTo("Unhandled Exception")))
+                .andExpect(jsonPath("$.data", equalTo("메시지")))
+        ;
+
+        verify(callback, times(1)).on500Exception(any());
+        verifyNoMoreInteractions(callback);
     }
 
     private ResponseProperties getResponseProperties() {

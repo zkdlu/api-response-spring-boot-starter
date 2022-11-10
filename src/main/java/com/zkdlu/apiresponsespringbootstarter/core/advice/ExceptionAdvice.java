@@ -1,7 +1,6 @@
 package com.zkdlu.apiresponsespringbootstarter.core.advice;
 
 import com.zkdlu.apiresponsespringbootstarter.autoconfig.ResponseProperties;
-import com.zkdlu.apiresponsespringbootstarter.autoconfig.ResponseProperties.ExceptionProperties;
 import com.zkdlu.apiresponsespringbootstarter.core.model.SingleResult;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -13,39 +12,41 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 @RestControllerAdvice
 public class ExceptionAdvice {
     private final ResponseProperties responseProperties;
+    private final ExceptionCallback callback;
 
-    public ExceptionAdvice(ResponseProperties responseProperties) {
+    public ExceptionAdvice(final ResponseProperties responseProperties, final ExceptionCallback callback) {
         this.responseProperties = responseProperties;
+        this.callback = callback;
     }
 
     @ExceptionHandler(RuntimeException.class)
-    public Object handle(Exception e) {
-        return getResult(e, getExceptionProperties(e, ExceptionProperties.UNHANDLED));
+    public Object handle(final Exception e) {
+        return getResult(e, getExceptionProperties(e, ResponseProperties.ExceptionProperties.UNHANDLED));
     }
 
 
     @ExceptionHandler(NoHandlerFoundException.class)
-    public Object handleNoHandlerFoundException(Exception e) {
-        return getResult(e, getExceptionProperties(e, ExceptionProperties.NOT_FOUND));
+    public Object handleNoHandlerFoundException(final Exception e) {
+        return getResult(e, getExceptionProperties(e, ResponseProperties.ExceptionProperties.NOT_FOUND));
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public Object handleNotSupportedMethodException(Exception e) {
-        return getResult(e, getExceptionProperties(e, ExceptionProperties.METHOD_NOT_ALLOWED));
+    public Object handleNotSupportedMethodException(final Exception e) {
+        return getResult(e, getExceptionProperties(e, ResponseProperties.ExceptionProperties.METHOD_NOT_ALLOWED));
     }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
-    public Object handleMissingRequestParameterException(Exception e) {
-        return getResult(e, getExceptionProperties(e, ExceptionProperties.BAD_REQUEST));
+    public Object handleMissingRequestParameterException(final Exception e) {
+        return getResult(e, getExceptionProperties(e, ResponseProperties.ExceptionProperties.BAD_REQUEST));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Object handleValidationException(Exception e) {
-        return getResult(e, getExceptionProperties(e, ExceptionProperties.BAD_REQUEST));
+    public Object handleValidationException(final Exception e) {
+        return getResult(e, getExceptionProperties(e, ResponseProperties.ExceptionProperties.BAD_REQUEST));
     }
 
-    private ExceptionProperties getExceptionProperties(Exception e, ExceptionProperties unhandled) {
-        ExceptionProperties exceptionModel = responseProperties.getExceptions()
+    private ResponseProperties.ExceptionProperties getExceptionProperties(final Exception e, final ResponseProperties.ExceptionProperties unhandled) {
+        final ResponseProperties.ExceptionProperties exceptionModel = responseProperties.getExceptions()
                 .values().stream()
                 .filter(r -> r.getType().equals(e.getClass()))
                 .findFirst()
@@ -55,12 +56,21 @@ public class ExceptionAdvice {
         return exceptionModel;
     }
 
-    private SingleResult<Object> getResult(Exception e, ExceptionProperties exceptionModel) {
-        SingleResult<Object> result = new SingleResult<>();
+    private SingleResult<Object> getResult(final Exception e, final ResponseProperties.ExceptionProperties exceptionModel) {
+        final SingleResult<Object> result = new SingleResult<>();
         result.setSuccess(false);
         result.setCode(exceptionModel.getCode());
         result.setMsg(exceptionModel.getMsg());
         result.setData(e.getMessage());
+
+        notify(result, e);
+
         return result;
+    }
+
+    private void notify(SingleResult<Object> result, Exception e) {
+        int code = result.getCode();
+        if (code >= 500) callback.on500Exception(e);
+        else if (code >= 400) callback.on400Exception(e);
     }
 }
