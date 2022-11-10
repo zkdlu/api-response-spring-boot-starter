@@ -63,13 +63,12 @@ public class ExceptionAdvice {
         result.setMsg(exceptionModel.getMsg());
         result.setData(e.getMessage());
 
-        notify(result, e);
+        notify(result.getCode(), e);
 
         return result;
     }
 
-    private void notify(SingleResult<Object> result, Exception e) {
-        int code = result.getCode();
+    private void notify(int code, Exception e) {
         callback.onException(code, e);
     }
 }
