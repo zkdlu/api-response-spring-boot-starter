@@ -21,7 +21,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -193,7 +192,6 @@ public class HandlerTest {
         ;
 
         verify(callback, times(1)).on400Exception(any());
-        verifyNoMoreInteractions(callback);
     }
 
     @Test
@@ -217,7 +215,6 @@ public class HandlerTest {
         ;
 
         verify(callback, times(1)).on500Exception(any());
-        verifyNoMoreInteractions(callback);
     }
 
     private ResponseProperties getResponseProperties() {

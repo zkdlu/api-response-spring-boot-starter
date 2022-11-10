@@ -70,7 +70,6 @@ public class ExceptionAdvice {
 
     private void notify(SingleResult<Object> result, Exception e) {
         int code = result.getCode();
-        if (code >= 500) callback.on500Exception(e);
-        else if (code >= 400) callback.on400Exception(e);
+        callback.onException(code, e);
     }
 }
