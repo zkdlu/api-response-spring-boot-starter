@@ -3,13 +3,17 @@ package com.zkdlu.apiresponsespringbootstarter.autoconfig;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.http.HttpStatus;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @ConfigurationProperties("spring.response")
 public class ResponseProperties {
     private SuccessProperties success = new SuccessProperties();
     private Map<String, ExceptionProperties> exceptions = new HashMap<>();
+
+    private List<String> blackList = new ArrayList<>();
 
     public SuccessProperties getSuccess() {
         return success;
@@ -25,6 +29,14 @@ public class ResponseProperties {
 
     public void setExceptions(Map<String, ExceptionProperties> exceptions) {
         this.exceptions = exceptions;
+    }
+
+    public List<String> getBlackList() {
+        return blackList;
+    }
+
+    public void setBlackList(final List<String> blackList) {
+        this.blackList = blackList;
     }
 
     public static class SuccessProperties {

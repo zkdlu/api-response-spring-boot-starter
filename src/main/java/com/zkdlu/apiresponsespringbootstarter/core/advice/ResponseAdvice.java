@@ -12,21 +12,10 @@ import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
-import org.springframework.web.util.pattern.PathPattern;
 import org.springframework.web.util.pattern.PathPatternParser;
-
-import java.util.Arrays;
-import java.util.List;
 
 @RestControllerAdvice
 public class ResponseAdvice implements ResponseBodyAdvice<Object> {
-    private static final List<PathPattern> WHITE_LIST = Arrays.asList(
-            new PathPatternParser().parse("/v*/api-docs"),
-            new PathPatternParser().parse("/swagger-resources/**"),
-            new PathPatternParser().parse("/swagger-ui.html"),
-            new PathPatternParser().parse("/webjars/**"),
-            new PathPatternParser().parse("/swagger/**"));
-
     private final ResponseService responseService;
     private final ResponseProperties responseProperties;
 
@@ -67,7 +56,9 @@ public class ResponseAdvice implements ResponseBodyAdvice<Object> {
     }
 
     private boolean containInWhiteList(ServerHttpRequest request) {
-        return WHITE_LIST.stream()
+        return responseProperties.getBlackList()
+                .stream()
+                .map(url -> new PathPatternParser().parse(url))
                 .anyMatch(pathPattern -> pathPattern.matches(PathContainer.parsePath(request.getURI().getPath())));
     }
 }
